@@ -10,4 +10,5 @@ It begains, you can jump, move and look around !
 ✓已添加种子，现在可以手动修改map.seed的赋值来使用固定的地图
 # v1.02
 ✓修复一些行走的Bug
+
 ✓支持自定义
