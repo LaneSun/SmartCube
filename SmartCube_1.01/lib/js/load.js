@@ -22,7 +22,7 @@ this.init = function () {
         mapBuild: 4,
         mapQualityMitlply: 4,
         mapSize: 4,
-        isImage:false,
+        isImage:true,
         sunSpeed:100,
         speed:10,
         checkSpeed:10,

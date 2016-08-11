@@ -5,8 +5,6 @@ body {
 	margin-bottom: 0px;
 	background-image: url(../img/background/8.png);
 	background-attachment: fixed;
-	background-origin: border-box;
-	background-size: 100% auto;
 	background-position: 0% 0%;
 }
 .win {
