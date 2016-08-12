@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Smart Block</title>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="../lib/js/jquery.js"></script>
+        <script src="../lib/js/sweetalert2.min.js"></script>
+        <script type="text/javascript" src="../lib/js/three.min.js"></script>
+        <script type="text/javascript" src="../lib/js/Projector.js"></script>
+        <script type="text/javascript" src="../lib/js/dat.gui.js"></script>
+        <script type="text/javascript" src="../lib/js/ImprovedNoise.js"></script>
+        <script type="text/javascript" src="../lib/js/shortcuts.js"></script>
+        <script type="text/javascript" src="../lib/js/support.js"></script>
+        <script type="text/javascript" src="../lib/js/cycles.js"></script>
+        <script type="text/javascript" src="../lib/js/windows.js"></script>
+        <script type="text/javascript" src="../lib/js/mouselock.js"></script>
+        <script type="text/javascript" src="../lib/js/load.js"></script>
+        <script type="text/javascript" src="../lib/js/blocks.js"></script>
+        <script type="text/javascript" src="../lib/js/stats.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../lib/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../lib/css/sweetalert2.min.css">
+    </head>
+    <body>
+        <div id="show" hidden="true">
+        <canvas class="fix" id="screen2"></canvas>
+        <canvas class="fix" id="screen"></canvas>
+        </div>
+        <script>
+            //var load = new loadjs();
+            function pointerLockChange() {
+                if (document.pointerLockElement === document.getElementById("show") ||
+                    document.mozPointerLockElement === document.getElementById("show") ||
+                    document.webkitPointerLockElement === document.getElementById("show")) {
+                    
+                } else {
+                    // document.getElementById("show").hidden = true;
+                }
+            }
+            document.addEventListener('pointerlockchange', pointerLockChange, false);
+            document.addEventListener('mozpointerlockchange', pointerLockChange, false);
+            document.addEventListener('webkitpointerlockchange', pointerLockChange, false);
+            
+            window.setTimeout("start()",1000);
+        </script>
+    </body>
+</html>
