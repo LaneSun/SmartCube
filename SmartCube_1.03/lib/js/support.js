@@ -819,7 +819,7 @@ function start() {
                         localStorage.setItem("checkSpeed",control.checkSpeed);
                         localStorage.setItem("gravity",control.gravity/4);
                         localStorage.setItem("isImage",control.isImage);
-                        localStorage.setItem("mapSeed",map.seed);
+                        localStorage.setItem("mapSeed",document.getElementById("mapSeed").innerText);
                         window.setTimeout("loadjs()",1000);
                     }
                 });

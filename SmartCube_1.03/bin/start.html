@@ -40,6 +40,12 @@
             document.addEventListener('mozpointerlockchange', pointerLockChange, false);
             document.addEventListener('webkitpointerlockchange', pointerLockChange, false);
             
+            swal({
+                title: 'Loading',
+                type: 'info',
+                timer: 800,
+                showConfirmButton: false,
+            });
             window.setTimeout("start()",1000);
         </script>
     </body>
