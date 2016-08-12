@@ -1,4 +1,4 @@
-# SmartCube
+﻿# SmartCube
 This is online Minecraft !
 # v0.01
 It begains, you can jump, move and look around !
@@ -12,3 +12,9 @@ It begains, you can jump, move and look around !
 ✓修复一些行走的Bug
 
 ✓支持自定义
+# v1.03
+✓更漂亮的界面
+
+✓自动存储设置
+
+✓扫描浏览器支持性，防止出错
