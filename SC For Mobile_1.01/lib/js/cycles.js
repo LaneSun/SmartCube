@@ -3,5 +3,6 @@ function doRender() {
         renderer.render(scene, camera);
         stats.update();
     }
+    // drawCav2();
     requestAnimationFrame(doRender);
 }

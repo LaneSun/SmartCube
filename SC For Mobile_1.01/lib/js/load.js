@@ -1,7 +1,6 @@
 function loadjs() {
 this.init = function () {
     window.anl = new supportjs();
-    anl.count = 2;
     // mainImg = anl.getTextures("main");
     // anl.getTextures("dirt");
 
@@ -59,7 +58,7 @@ this.init = function () {
     window.scene = 0;
     window.camera = 0;
     
-    mouse.img = anl.getImages("mouse");
+    mouse.img = anl.getImages("direction");
     window.canvas = document.getElementById("screen");
     window.canvas2 = document.getElementById("screen2");
     window.context2 = canvas2.getContext('2d');
@@ -88,7 +87,6 @@ this.init = function () {
 this.next = function () {
     doRender();
     context2.imageSmoothingEnabled = false;
-    context2.drawImage(mouse.img,0,0,16,16,cavW/2-16,cavH/2-16,32,32);
     map.data = anl.generateHeight(control.mapSize*2,control.mapSize*2,255);
     windows = new windowsjs();
     windows.game();

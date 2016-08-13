@@ -113,6 +113,7 @@ function windowsjs() {
         //初始化
             this.init = function () {
             //场景与相机
+                drawCav2();
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(45, cavW/cavH , 0.1, 2*control.eyesight);
                             camera.position.x = 0;
@@ -242,14 +243,17 @@ function windowsjs() {
                     cycles[cycles.length] = window.setInterval(this.cycle2,control.sunSpeed);
                 //鼠标定义
                     anl.moveLogic = this.moveLogic;
-                    anl.downLogicL = this.downLogicL;
-                    // anl.upLogic = this.upLogic;
+                    anl.downLogic = this.downLogic;
+                    anl.upLogic = this.upLogic;
                     mouse.on = true;
-                    this.addHotKey();
                     //mouselock.outControl();
         }
-        this.moveLogic = function (mx,my) {
-            controlCamera.rotate(mx,my);
+        this.moveLogic = function (mx,my,rx,ry) {
+            if (rx > cavW/2) {
+                controlCamera.rotate(mx,my);
+            } else if(mx + my > 1) {
+                anl.jump(0);
+            }
             // raycaster.setFromCamera( {x:0,y:0}, camera );
             // var hits = raycaster.intersectObjects( box.children );
             // if (hits.length > 0) {
@@ -260,23 +264,38 @@ function windowsjs() {
             //     hits[0].object.material.update();
             // }
         }
-        this.downLogicL = function (mx,my) {
-            raycaster.setFromCamera( {x:0,y:0}, camera );
-            var hits = raycaster.intersectObjects( box.children );
-            if (hits.length > 0) {
-                hits[0].face.color = new THREE.Color( 0xffaa00 );
+        this.downLogic = function (mx,my) {
+            // raycaster.setFromCamera( {x:0,y:0}, camera );
+            // var hits = raycaster.intersectObjects( box.children );
+            // if (hits.length > 0) {
+            //     hits[0].face.color = new THREE.Color( 0xffaa00 );
+            // }
+            if (mx > 56 && mx < 96 && my > cavH - 136 && my < cavH - 96) {
+                anl.startWalkW(0);
+            }
+            if (mx > 56 && mx < 96 && my > cavH - 56 && my < cavH - 16) {
+                anl.startWalkS(0);
+            }
+            if (mx > 16 && mx < 56 && my > cavH - 96 && my < cavH - 56) {
+                anl.startWalkA(0);
+            }
+            if (mx > 96 && mx < 136 && my > cavH - 96 && my < cavH - 56) {
+                anl.startWalkD(0);
             }
         }
-        // this.upLogic = function (mx,my) {
-        //     for (var i = 0; i < cube.length; i++) {
-        //         cube[i].material.emissive.setHex( 0x000000 );
-        //     }
-        //     raycaster.setFromCamera( {x:0,y:0}, camera );
-		// 	var hits = raycaster.intersectObjects( cube );
-        //     if (hits.length > 0) {
-        //         hits[0].object.material.emissive.setHex( 0x333333 );
-        //     }
-        // }
+        this.upLogic = function (mx,my) {
+            // for (var i = 0; i < cube.length; i++) {
+            //     cube[i].material.emissive.setHex( 0x000000 );
+            // }
+            // raycaster.setFromCamera( {x:0,y:0}, camera );
+			// var hits = raycaster.intersectObjects( cube );
+            // if (hits.length > 0) {
+            //     hits[0].object.material.emissive.setHex( 0x333333 );
+            // }
+            if (mx < cavW/2) {
+                anl.stopWalk(0);
+            }
+        }
         this.cycle0 = function () {
             anl.checkPlayer(0);
         }
@@ -316,52 +335,6 @@ function windowsjs() {
             } else {
                 map.time = 0;
             }
-        }
-        this.addHotKey = function () {
-            document.addEventListener("keydown",function (e) {
-                switch (e.key) {
-                    case "w":
-                        anl.startWalkW(0);
-                        break;
-                    case "s":
-                        anl.startWalkS(0);
-                        break;
-                    case "a":
-                        anl.startWalkA(0);
-                        break;
-                    case "d":
-                        anl.startWalkD(0);
-                        break;
-                    case " ":
-                        anl.jump(0);
-                        break;
-                    
-                    default:
-                        break;
-                }
-            },false)
-            document.addEventListener("keyup",function (e) {
-                switch (e.key) {
-                    case "w":
-                        anl.stopWalk(0,"W");
-                        break;
-                    case "s":
-                        anl.stopWalk(0,"S");
-                        break;
-                    case "a":
-                        anl.stopWalk(0,"A");
-                        break;
-                    case "d":
-                        anl.stopWalk(0,"D");
-                        break;
-                    case " ":
-                        anl.stopWalk(0,"Space");
-                        break;
-                    
-                    default:
-                        break;
-                }
-            },false)
         }
         this.init();
     }

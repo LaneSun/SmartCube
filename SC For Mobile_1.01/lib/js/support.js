@@ -88,20 +88,38 @@
                     break;
             }
         } else {
-            switch (anl.blocks[name.split("_")[0]].suv) {
-                case "same":
-                    return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].face(),vertexColors: THREE.VertexColors});
-                case "half":
-                    switch (name.split("_")[1]) {
-                        case "py":
-                            return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].upFace(),vertexColors: THREE.VertexColors});
-                        case "ny":
-                            return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].downFace(),vertexColors: THREE.VertexColors});
-                        default:
-                            return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].sideFace(),vertexColors: THREE.VertexColors});
-                    }
-                default:
-                    break;
+            if (control.useShadow) {
+                switch (anl.blocks[name.split("_")[0]].suv) {
+                    case "same":
+                        return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].face(),vertexColors: THREE.VertexColors});
+                    case "half":
+                        switch (name.split("_")[1]) {
+                            case "py":
+                                return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].upFace(),vertexColors: THREE.VertexColors});
+                            case "ny":
+                                return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].downFace(),vertexColors: THREE.VertexColors});
+                            default:
+                                return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].sideFace(),vertexColors: THREE.VertexColors});
+                        }
+                    default:
+                        break;
+                }
+            } else {
+                switch (anl.blocks[name.split("_")[0]].suv) {
+                    case "same":
+                        return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].face()});
+                    case "half":
+                        switch (name.split("_")[1]) {
+                            case "py":
+                                return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].upFace()});
+                            case "ny":
+                                return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].downFace()});
+                            default:
+                                return new THREE.MeshLambertMaterial({map:anl.blocks[name.split("_")[0]].sideFace()});
+                        }
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -547,13 +565,10 @@
             Space: false,
         };
         this.speedY = 0;
-        this.speedXZ = 0;
+        this.speedXZ = 0.05;
         this.jumpStrength = 10;
     }
     this.startWalkW = function (num) {
-        if (players[num].isWalking.W == false) {
-            players[num].isWalking.W = true;
-            players[num].walking = true;
             players[num].cycles.W[players[num].cycles.W.length] = window.setInterval(function () {
                 let face = players[num].face;
                 if (Math.sin(face) > 0) {
@@ -575,12 +590,8 @@
                     }
                 }
             },players[num].speed);
-        }
     }
     this.startWalkS = function (num) {
-        if (players[num].isWalking.S == false) {
-            players[num].isWalking.S = true;
-            players[num].walking = true;
             players[num].cycles.S[players[num].cycles.S.length] = window.setInterval(function () {
                 let face = players[num].face + Math.PI;
                 if (Math.sin(face) > 0) {
@@ -602,12 +613,8 @@
                     }
                 }
             },players[num].speed);
-        }
     }
     this.startWalkA = function (num) {
-        if (players[num].isWalking.A == false) {
-            players[num].isWalking.A = true;
-            players[num].walking = true;
             players[num].cycles.A[players[num].cycles.A.length] = window.setInterval(function () {
                 let face = players[num].face + Math.PI/2;
                 if (Math.sin(face) > 0) {
@@ -629,12 +636,8 @@
                     }
                 }
             },players[num].speed);
-        }
     }
     this.startWalkD = function (num) {
-        if (players[num].isWalking.D == false) {
-            players[num].isWalking.D = true;
-            players[num].walking = true;
             players[num].cycles.D[players[num].cycles.D.length] = window.setInterval(function () {
                 let face = players[num].face - Math.PI/2;
                 if (Math.sin(face) > 0) {
@@ -656,36 +659,29 @@
                     }
                 }
             },players[num].speed);
-        }
     }
-    this.stopWalk = function (num,til) {
-        for (var i = 0; i < players[num].cycles[til].length; i++) {
-            window.clearInterval(players[num].cycles[til][i]);
+    this.stopWalk = function (num) {
+        for (var i = 0; i < players[num].cycles.W.length; i++) {
+            window.clearInterval(players[num].cycles.W[i]);
         }
-        players[num].cycles[til] = new Array();
-        players[num].isWalking[til] = false;
-        if (!players[num].isWalking.W) {
-            if (!players[num].isWalking.S) {
-                if (!players[num].isWalking.A) {
-                    if (!players[num].isWalking.D) {
-                        players[num].speedXZ = 0;
-                        players[num].walking = false;
-                    }
-                }
-            }
+        for (var i = 0; i < players[num].cycles.S.length; i++) {
+            window.clearInterval(players[num].cycles.S[i]);
         }
+        for (var i = 0; i < players[num].cycles.A.length; i++) {
+            window.clearInterval(players[num].cycles.A[i]);
+        }
+        for (var i = 0; i < players[num].cycles.D.length; i++) {
+            window.clearInterval(players[num].cycles.D[i]);
+        }
+        players[num].cycles.W = new Array();
+        players[num].cycles.S = new Array();
+        players[num].cycles.A = new Array();
+        players[num].cycles.D = new Array();
     }
     this.checkPlayer = function (num) {
         if (0|(players[num].ry + players[num].speedY/20) < 0 || 0|(players[num].ry + 1) >= map.data[0|(players[num].rz + 0.5)][0|(players[num].rx + 0.5)].length) {
             //Player Has Died...
         } else {
-            if (players[num].walking == true) {
-                if (players[num].speedXZ < 0.05) {
-                    players[num].speedXZ += 0.0005;
-                }
-            } else {
-                players[num].speedXZ = 0;
-            }
             if (anl.getType(map.data[0|(players[num].rz + 0.7)][0|(players[num].rx + 0.7)][0|(players[num].ry -0.001 + players[num].speedY*control.checkSpeed/1000)].name) != "hard" && anl.getType(map.data[0|(players[num].rz + 0.3)][0|(players[num].rx + 0.3)][0|(players[num].ry -0.001 + players[num].speedY*control.checkSpeed/1000)].name) != "hard") {
                 players[num].ry += players[num].speedY*control.checkSpeed/1000;
                 if (players[num].speedY > - 40) {
@@ -705,20 +701,21 @@
         }
     }
     this.jump = function (num) {
-        if (players[num].isWalking.Space == false) {
-            players[num].isWalking.Space = true;
-            players[num].cycles.Space[players[num].cycles.Space.length] = window.setInterval(function () {
-                if (anl.getType(map.data[0|(players[num].rz + 0.7)][0|(players[num].rx + 0.7)][0|(players[num].ry + 2.6)].name) != "hard" && anl.getType(map.data[0|(players[num].rz + 0.3)][0|(players[num].rx + 0.3)][0|(players[num].ry + 2.6)].name) != "hard" && players[num].speedY <= 0) {
-                    if (anl.getType(map.data[0|(players[num].rz + 0.7)][0|(players[num].rx + 0.7)][0|(players[num].ry -0.4)].name) == "hard" || anl.getType(map.data[0|(players[num].rz + 0.3)][0|(players[num].rx + 0.3)][0|(players[num].ry -0.2)].name) == "hard"){
-                        players[num].speedY = -players[num].speedY/2 + players[num].jumpStrength;
-                    }
-                }
-            },4);
+        if (anl.getType(map.data[0|(players[num].rz + 0.7)][0|(players[num].rx + 0.7)][0|(players[num].ry + 2.6)].name) != "hard" && anl.getType(map.data[0|(players[num].rz + 0.3)][0|(players[num].rx + 0.3)][0|(players[num].ry + 2.6)].name) != "hard" && players[num].speedY <= 0) {
+            if (anl.getType(map.data[0|(players[num].rz + 0.7)][0|(players[num].rx + 0.7)][0|(players[num].ry -0.4)].name) == "hard" || anl.getType(map.data[0|(players[num].rz + 0.3)][0|(players[num].rx + 0.3)][0|(players[num].ry -0.2)].name) == "hard"){
+                players[num].speedY = -players[num].speedY/2 + players[num].jumpStrength;
+            }
         }
     }
 }
 function start() {
-    screen.lockOrientation('landscape-primary');
+    // if(screen.width < screen.height) {
+    //     swal({
+    //         title: 'Wrong',
+    //         text: 'Please use landscape type !',
+    //         type: 'error',
+    //     });
+    // } else {
     var localData = {
         eyesight: localStorage.getItem("eyesight")||100,
         mapSize: localStorage.getItem("mapSize")||100,
@@ -729,6 +726,8 @@ function start() {
         gravity: localStorage.getItem("gravity")||10,
         isImage: localStorage.getItem("isImage")||true,
         mapSeed: localStorage.getItem("mapSeed")||(Math.random() * 10000000000000000),
+        touchSpeed: localStorage.getItem("touchSpeed")||2,
+        useShadow: localStorage.getItem("useShadow")||true,
     };
     var stat = 0;
     if (window.HTMLCanvasElement) {
@@ -788,7 +787,13 @@ function start() {
 "        <td align='left'><b>Use Images</b></td><td width='100' align='left'><div id='isImage' contenteditable='true'>"+ localData.isImage +"</div></td>"+
 "    </tr>"+
 "    <tr>"+
+"        <td align='left'><b>Use Shadow</b></td><td width='100' align='left'><div id='useShadow' contenteditable='true'>"+ localData.useShadow +"</div></td>"+
+"    </tr>"+
+"    <tr>"+
 "        <td align='left'><b>Map Seed</b></td><td width='100' align='left'><div id='mapSeed' contenteditable='true'>"+ localData.mapSeed +"</div></td>"+
+"    </tr>"+
+"    <tr>"+
+"        <td align='left'><b>Touch Speed</b></td><td width='100' align='left'><div id='touchSpeed' contenteditable='true'>"+ localData.touchSpeed +"</div></td>"+
 "    </tr>"+
 "</table>",
                     showCancelButton: false,
@@ -807,6 +812,8 @@ function start() {
                             checkSpeed: eval(document.getElementById("checkSpeed").innerText),
                             sunCheckSpeed: 25,
                             gravity: eval(document.getElementById("gravity").innerText) * 4,
+                            touchSpeed: eval(document.getElementById("touchSpeed").innerText),
+                            useShadow: eval(document.getElementById("useShadow").innerText),
                         };
                         let seed = document.getElementById("mapSeed").innerText;
                         window.map = {
@@ -821,6 +828,8 @@ function start() {
                         localStorage.setItem("gravity",control.gravity/4);
                         localStorage.setItem("isImage",control.isImage);
                         localStorage.setItem("mapSeed",document.getElementById("mapSeed").innerText);
+                        localStorage.setItem("touchSpeed",control.touchSpeed);
+                        localStorage.setItem("useShadow",control.useShadow);
                         window.setTimeout("loadjs()",1000);
                     }
                 });
@@ -833,4 +842,10 @@ function start() {
             type: 'error',
         });
     }
+    // }
+}
+function drawCav2() {
+    context2.fillStyle="rgba(0,0,0,0)";
+    context2.fillRect(0,0,cavW,cavH);
+    context2.drawImage(mouse.img,0,0,81,81,16,cavH-136,120,120);
 }
