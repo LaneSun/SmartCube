@@ -233,6 +233,8 @@ function windowsjs() {
                 scene.add(controlCamera.getObject(),sky,directionalLight,directionalLight1,directionalLight2,directionalLight3,directionalLight4,box,sun,moon);
             //鼠标扫描
                 raycaster.far = 5;
+                var checker = new anl.checkCamera();
+                checker.play();
             //启动
                 //循环
                     for (var i = 0; i < cycles.length; i++) {

@@ -735,7 +735,80 @@ function supportjs() {
         }
     };
     this.checkCamera = function (){
-
+        var face = players[0].face;
+        var position = {};
+        var material = new THREE.MeshBasicMaterial({color:0xffffff});
+        material.opacity = 0.4;
+        material.transparent = true;
+        var target = new THREE.Mesh(new THREE.BoxGeometry(1.1,1.1,1.1),material);
+        target.visible = false;
+        scene.add(target);
+        var time = 0;
+        position.x = players[0].position.x;
+        position.y = players[0].position.y + 1;
+        position.z = players[0].position.z;
+        this.check = function (){
+            position.x = players[0].position.x;
+            position.y = players[0].position.y + 1;
+            position.z = players[0].position.z;
+            time++;
+            var length = 0.05;
+            var movement_y = length * Math.sin(face.x);
+            var movement_x = length * Math.cos(face.x) * Math.sin(face.y);
+            var movement_z = length * Math.cos(face.x) * Math.cos(face.y);
+            position.y += movement_y;
+            position.x -= movement_x;
+            position.z -= movement_z;
+            try {
+                if (anl.getType(map.data[position.z + 0.5 | 0][position.x + 0.5 | 0][position.y + 0.5 | 0].name) == "hard") {
+                    target.visible = true;
+                    target.position.x = position.x + 0.5 | 0;
+                    target.position.y = position.y + 0.5 | 0;
+                    target.position.z = position.z + 0.5 | 0;
+                    time = 0;
+                } else {
+                    if (time < 100){
+                        this.tick()
+                    } else {
+                        time = 0
+                        target.visible = false;
+                    }
+                }
+            } catch (e){
+                target.visible = false;
+            }
+        };
+        this.tick = function (){
+            time++;
+            var length = 0.05;
+            var movement_y = length * Math.sin(face.x);
+            var movement_x = length * Math.cos(face.x) * Math.sin(face.y);
+            var movement_z = length * Math.cos(face.x) * Math.cos(face.y);
+            position.y += movement_y;
+            position.x -= movement_x;
+            position.z -= movement_z;
+            try {
+                if (anl.getType(map.data[position.z + 0.5 | 0][position.x + 0.5 | 0][position.y + 0.5 | 0].name) == "hard") {
+                    target.visible = true;
+                    target.position.x = position.x + 0.5 | 0;
+                    target.position.y = position.y + 0.5 | 0;
+                    target.position.z = position.z + 0.5 | 0;
+                    time = 0;
+                } else {
+                    if (time < 100){
+                        this.tick()
+                    } else {
+                        time = 0
+                        target.visible = false;
+                    }
+                }
+            } catch (e){
+                target.visible = false;
+            }
+        };
+        this.play = function (){
+            anl.thingChecker.add(this)
+        }
     }
 }
 function start() {
