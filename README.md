@@ -20,3 +20,5 @@ It begains, you can jump, move and look around !
 ✓扫描浏览器支持性，防止出错
 # SCMv1.01
 ✓是的，你没看错！SmartCube现在开始支持手机，请使用Chrome For Android打开
+# SCv1.04
+✓现在体验用机关枪扫射的快感吧
